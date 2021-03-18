@@ -29,26 +29,23 @@ public class LoginActivity extends AppCompatActivity { //klases pradzia
                 String usernameStr = username.getText().toString();  // String  vienintelis is didziosios raides
                 String passwordStr = password.getText().toString();
 
-                username.setError(null); //issivalome klaidu zurnala (username)
+                username.setError(null);
+                password.setError(null);//issivalome klaidu zurnala (username ir password)
 
-                if (Validation.isUsernameValid(usernameStr)) { //jeigu bus validus duomenys pereisim is vieno lango i kita
+                if (Validation.isUsernameValid(usernameStr) && Validation.isPasswordValid(passwordStr)) { //jeigu bus validus duomenys pereisim is vieno lango i kita
                     Intent goToSearchActivity = new Intent(LoginActivity.this, SearchActivity.class);  //pirmas is kur(this nes esam sitoje klaseje), o antras i kur (class)
                     startActivity(goToSearchActivity);
-                } else if (!Validation.isUsernameValid(usernameStr)){ //jeigu nebus validus ismesime i ekrana klaida
+                } else if (!Validation.isUsernameValid(usernameStr)) { //jeigu nebus validus ismesime i ekrana klaida
                     username.setError(getResources().getString(R.string.login_invalid_username));
                     username.requestFocus();
-                   // Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_invalid_username),  Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_invalid_username),  Toast.LENGTH_SHORT).show();
+                } else {
+                    password.setError(getResources().getString(R.string.login_invalid_password));
+                    password.requestFocus();
                 }
 
-
-
-               // Toast.makeText(LoginActivity.this,  "Prisijungimo vardas: " +
-                       // usernameStr + "\n" + "Slaptazodis: " + passwordStr, Toast.LENGTH_SHORT).show();
-
-
-
-
             } //onclick pabaiga
+
         }); //eina kartu jeigu tai yra baigiasi funkcija mygtuko paspaudimu
 
     } //funkcijos pabaiga
