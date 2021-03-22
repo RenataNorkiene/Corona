@@ -40,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     Intent goToLoginActivity = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(goToLoginActivity);
+
                 } else {
                     username.setError(getResources().getString(R.string.register_invalid_credentials));
                     username.requestFocus();

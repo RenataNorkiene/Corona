@@ -7,14 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity { //klases pradzia
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) { //funkcijos pradzia
+    protected void onCreate(Bundle savedInstanceState) { // onCreate funkcijos pradzia
         super.onCreate(savedInstanceState); // tuscio lango sukurimas
-        setContentView(R.layout.activity_login); //suteik siam langui si vaizda (kodas siejamas su vaizdu)
+        setContentView(R.layout.activity_login); // kodas siejamas su vaizdu
 
         EditText username = findViewById(R.id.username);
         EditText password = findViewById(R.id.password);
@@ -23,24 +24,28 @@ public class LoginActivity extends AppCompatActivity { //klases pradzia
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {  //kodas paspaudus mygtuka login
 
                 String usernameStr = username.getText().toString();
                 String passwordStr = password.getText().toString();
 
                 if (Validation.isUsernameValid(usernameStr) && Validation.isUsernameValid(passwordStr)) {
                     Toast.makeText(LoginActivity.this, "Username: " + usernameStr + "\n" + "Password: " + passwordStr, Toast.LENGTH_LONG).show();
+
                     Intent goToSearchActivity = new Intent(LoginActivity.this, SearchActivity.class); //parametrai: iš kur (visad su this, nes šita klasė), į kur (visad su class)
                     startActivity(goToSearchActivity);
+
                 } else {
                     username.setError(getResources().getString(R.string.login_invalid_credentials));
                     username.requestFocus();
 
                 }
+
             }
+
         });
 
-        register.setOnClickListener(new View.OnClickListener() {
+        register.setOnClickListener(new View.OnClickListener() { //kodas paspaudus mygtuka register
             @Override
             public void onClick(View v) {
 
@@ -48,7 +53,10 @@ public class LoginActivity extends AppCompatActivity { //klases pradzia
                 startActivity(goToRegisterActivity);
 
 
-            }
-        });
-    }
-}
+            } // event pabaiga
+
+        }); //  event listener pabaiga
+
+    } // onCreate funkcijos pabaiga
+
+} //klases pabaiga

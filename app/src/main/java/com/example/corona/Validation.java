@@ -13,12 +13,15 @@ public class Validation {
     public static boolean isUsernameValid(String username) {
         return isCredentialsValid(username, USERNAME_REGEX_PATTERN);
     }
+
     public static boolean isPasswordValid(String password) {
         return isCredentialsValid(password, PASSWORD_REGEX_PATTERN);
     }
+
     public static boolean isEmailValid(String email) {
         return isCredentialsValid(email, EMAIL_REGEX_PATTERN);
     }
+
     private static boolean isCredentialsValid(String string, String regexPattern) {
         Pattern pattern = Pattern.compile(regexPattern); //sukuriamos taisyklės, pagal kurias vyks validacija username
         Matcher matcher = pattern.matcher(string);  //matcher yra svarstyklės,
