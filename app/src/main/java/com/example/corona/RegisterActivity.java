@@ -34,9 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
                 password.setError(null);
                 email.setError(null);
 
-                if (Validation.isUsernameValid(usernameStr) && Validation.isPasswordValid(passwordStr) && Validation.isEmailValid(emailStr)) {
-                    Toast.makeText(RegisterActivity.this, "Username: " +
-                            usernameStr + "\n" + "Email: " + emailStr + "\n" + "Password: " + passwordStr, Toast.LENGTH_LONG).show();
+                    if (emailStr.length()>10 && emailStr.length()<50 && Validation.isUsernameValid(usernameStr) && Validation.isPasswordValid(passwordStr) && Validation.isEmailValid(emailStr)) {
+                    Toast.makeText(RegisterActivity.this, "Username: " + usernameStr + "\n" + "Email: " + emailStr + "\n" + "Password: " + passwordStr, Toast.LENGTH_LONG).show();
 
                     Intent goToLoginActivity = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(goToLoginActivity);

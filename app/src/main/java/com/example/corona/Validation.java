@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 public class Validation {
     public static final String USERNAME_REGEX_PATTERN = "^[a-zA-Z0-9]{3,20}$";
     public static final String PASSWORD_REGEX_PATTERN = "^[a-zA-Z0-9.!@_]{5,20}$";
-    public static final String EMAIL_REGEX_PATTERN = "^[A-Za-z0-9+_.-]+@(.+){10,50}$";
-    //"^[a-zA-Z0-9@._-]{10,50}$";
+    public static final String EMAIL_REGEX_PATTERN = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
+
 
     public static boolean isUsernameValid(String username) {
         return isCredentialsValid(username, USERNAME_REGEX_PATTERN);
@@ -24,7 +24,7 @@ public class Validation {
     }
 
     private static boolean isCredentialsValid(String string, String regexPattern) {
-        Pattern pattern = Pattern.compile(regexPattern); //sukuriamos taisyklės, pagal kurias vyks validacija username
+        Pattern pattern = Pattern.compile(regexPattern); //sukuriamos taisyklės, pagal kurias vyks validacija
         Matcher matcher = pattern.matcher(string);  //matcher yra svarstyklės,
         return matcher.find();  //jei tinka, grąžins true
     }
