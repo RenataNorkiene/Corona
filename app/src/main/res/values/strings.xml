@@ -17,4 +17,8 @@
     <string name="register_invalid_credentials">Invalid username, email and/or password</string>
 
     <string name="search_title">Search langas</string>
+
+
+    <string name="search_loading_data">Please wait for covid data</string>
+    <string name="search_error_reading_data">Couldnt read data from API, for more information:</string>
 </resources>
