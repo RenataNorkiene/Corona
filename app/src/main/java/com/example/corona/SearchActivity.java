@@ -1,11 +1,19 @@
 package com.example.corona;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +27,10 @@ public class SearchActivity extends AppCompatActivity {
     public static final String COVID_API = "https://covid19-api.weedmark.systems/api/v1/stats";
     private ArrayList<Corona> coronaList = new ArrayList<Corona>();
 
+    private RecyclerView recyclerView; //korteliu vaizdas
+    private Adapter adapter; //tarpininkas tarp searchActivity ir xml, apjungia dvi skirtingas klases
+
+    private SearchView searchView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +41,56 @@ public class SearchActivity extends AppCompatActivity {
         AsyncFetch asyncFetch = new AsyncFetch();
         asyncFetch.execute();//must be called to start onPressExecute, doInBackground
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) { //kad butu galimybe spausti it ieskoti reikia perrasyti metoda
 
+        // adds item to action bar
+        getMenuInflater().inflate(R.menu.search, menu);
+        // Get Search item from action bar and Get Search service
+        MenuItem searchItem = menu.findItem(R.id.action_search); //kad butu galima irasyti i menu juosta ko ieskome
+
+        //kreipiasi i bibliotekas ir vykdo pagal salygas:
+        SearchManager searchManager = (SearchManager) SearchActivity.this.getSystemService(Context.SEARCH_SERVICE);
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(SearchActivity.this.getComponentName()));
+            searchView.setIconified(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { //atsiranda simboliu paieskos
+        return super.onOptionsItemSelected(item);
+    }
+    // Every time when you press search button on keypad an Activity is recreated which in turn calls this function
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        // Get search query
+        //super.onNewIntent(intent);
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY); //issitraukiam ka vartotojas ivede
+
+            if (searchView != null) {
+                searchView.clearFocus();
+
+            }
+            //is visu valstybiu saraso sukuriamas sarasas pagal ieskoma valstybe (query)
+            ArrayList<Corona> coronaListByCountry = JSON.getCoronaListByCountry(coronaList, query);
+
+            if (coronaListByCountry.size() == 0) {
+                Toast.makeText(this, getResources().getString(R.string.search_no_results) + query, Toast.LENGTH_SHORT).show();
+            }
+            // duomenu perdavimas Adapteriui ir Recycleview sukurimas
+            recyclerView = (RecyclerView) findViewById(R.id.corona_list);
+            adapter = new Adapter(SearchActivity.this, coronaListByCountry);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
+        }
+    }
 
     private class AsyncFetch extends AsyncTask<String, String, JSONObject> {
         ProgressDialog progressDialog = new ProgressDialog(SearchActivity.this);
@@ -83,7 +144,7 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     jsonArray = JSON.getJSONArray(jsonObject);
                     coronaList = JSON.getList(jsonArray);
-                    System.out.println("Lithuania covidStats:" + JSON.getCoronaListByCountry(coronaList, "Italy"));
+
                 } catch (JSONException e) {
                     System.out.println(getResources().getString(R.string.search_error_reading_data) + e.getMessage());
                 }
