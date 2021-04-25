@@ -71,6 +71,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         // Get search query
         //super.onNewIntent(intent);
+        super.onNewIntent(intent);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY); //issitraukiam ka vartotojas ivede
 
