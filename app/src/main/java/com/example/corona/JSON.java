@@ -36,45 +36,45 @@ public class JSON {
         }
     }//readJsonFromUrl end
 // trys metodai svarbus norint issitraukti norimus duomenis is JSON
-    public static ArrayList<Corona> getList(JSONArray jsonArray) throws JSONException{
-        ArrayList<Corona> coronaList = new ArrayList<Corona>(); //created list with all counties
+    public static ArrayList<Coctails> getList(JSONArray jsonArray) throws JSONException{
+        ArrayList<Coctails> coctailsList = new ArrayList<Coctails>(); //created list with all counties
         //extract data from JSON and save it in Corona Objects List(coronaList)
         for (int i=0; i<jsonArray.length(); i++){
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            Corona corona = new Corona( //constructor for one object
-                    // public Corona(String country, String lastUpdate, String keyId, int confirmed, int deaths)
-                    jsonObject.getString("country"),
-                    jsonObject.getString("lastUpdate"),
-                    jsonObject.getString("keyId"),
-                    jsonObject.getInt("confirmed"),
-                    jsonObject.getInt("deaths")
+            Coctails coctails = new Coctails( //constructor for one object
+                    // public Coctails(string id, String name, String tags, String category, String glass)
+                    jsonObject.getString("idDrink"),
+                    jsonObject.getString("strDrink"),
+                    jsonObject.getString("strTags"),
+                    jsonObject.getString("strCategory"),
+                    jsonObject.getString("strGlass")
             );
-            coronaList.add(corona); //every objects of JSON goes true cycle and extracts data (country, lastUpdate etc.)
+            coctailsList.add(coctails); //every objects of JSON goes true cycle and extracts data (country, lastUpdate etc.)
         }
 
 
-        return coronaList;
+        return coctailsList;
     }
     public static JSONArray getJSONArray(JSONObject jsonObject) throws JSONException{ //from array extract list
        //remove from JSON all info, which is not needed, exept covid19Stats Array
-        int jsonLength = jsonObject.toString().length();
-        String covid19Stats = "{" + jsonObject.toString().substring(96, jsonLength) + "}"; //substring delete some symbols from string (starts from 96 till the end)
-
-        //string convert to JSONObject
-        JSONObject jsonObject1 = new JSONObject(covid19Stats);
-        //JSONObject convert to JSONArray
-        JSONArray jsonArray = jsonObject1.getJSONArray("covid19Stats");
+//        int jsonLength = jsonObject.toString().length();
+//        String covid19Stats = "{" + jsonObject.toString().substring(96, jsonLength) + "}"; //substring delete some symbols from string (starts from 96 till the end)
+//
+//        //string convert to JSONObject
+           //JSONObject jsonObject1 = new JSONObject(covid19Stats);
+//        //JSONObject convert to JSONArray
+        JSONArray jsonArray = jsonObject.getJSONArray("drinks");
         return jsonArray; //sita jsonArray paims aukstesnis metodas getList ir grazins mums sarasa
     }
 
-    public static ArrayList<Corona> getCoronaListByCountry(ArrayList<Corona> coronaArrayList, String country){
-        ArrayList<Corona> coronaListByCountry = new ArrayList<Corona>();
-        for (Corona corona : coronaArrayList) { //kaireje bus sukuriamas tos klases objektas, per kurios sarasa iteruojame (desineje)
-            if(corona.getKeyId().contains(country)){ //contains method (string method)  search part of string/word (country)
-                coronaListByCountry.add(corona);
+    public static ArrayList<Coctails> getCoctailsList(ArrayList<Coctails> coctailsArrayList, String coctailName){
+        ArrayList<Coctails> coctailsList = new ArrayList<Coctails>();
+        for (Coctails coctails : coctailsArrayList) { //kaireje bus sukuriamas tos klases objektas, per kurios sarasa iteruojame (desineje)
+            if(coctails.getName().contains(coctailName)){ //contains method (string method)  search part of string/word (country)
+                coctailsList.add(coctails);
             }
         }
-        return coronaListByCountry;
+        return coctailsList;
     }
 
 
