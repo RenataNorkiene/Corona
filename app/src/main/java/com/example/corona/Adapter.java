@@ -14,10 +14,10 @@ import java.util.List;
 public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> { //praplecia recycleview klase
     private Context context;
     private LayoutInflater inflater;
-    List<Corona> data; //data perduodama adapteriui per konstruktoriu
+    List<Coctails> data; //data perduodama adapteriui per konstruktoriu
 
     // create constructor to initialize context and data sent from SearchActivity
-    public Adapter(Context context, List<Corona> data) {
+    public Adapter(Context context, List<Coctails> data) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.data = data;
@@ -26,7 +26,7 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> { //p
     // Inflate the layout when ViewHolder created
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {//sukuria vaizdo container/kortele
-        View view = inflater.inflate(R.layout.container_corona, parent, false);
+        View view = inflater.inflate(R.layout.container_coctails, parent, false);
         MyHolder holder = new MyHolder(view);
         return holder;
     }
@@ -37,12 +37,12 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> { //p
         // Get current position of item in RecyclerView to bind data and assign values from list
         MyHolder myHolder = (MyHolder) holder;
         
-		Corona current = data.get(position); //elelemntu indexas sarase, kuria kortele ir ja numeruoja tais paciais index kurie yra sarase
+		Coctails current = data.get(position); //elementu indexas sarase, kuria kortele ir ja numeruoja tais paciais index kurie yra sarase
         //uzpildysime kortele duomenimis is saraso:
-        myHolder.textKeyId.setText(current.getKeyId());
-        myHolder.textLastUpdate.setText("Last Update: " + current.getLastUpdate());
-        myHolder.textConfirmed.setText("Confirmed: " + current.getConfirmed());
-        myHolder.textDeaths.setText("Deaths: " + current.getDeaths());
+        myHolder.textName.setText("Name: " + current.getName());
+        myHolder.textTags.setText("Tag: " + current.getTags());
+        myHolder.textCategory.setText("Category: " + current.getCategory());
+        myHolder.textGlass.setText("Glass: " + current.getGlass());
     }
 
     // return total item from List
@@ -53,18 +53,18 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> { //p
 
 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener { //kad butu galima paspaudus uzkrauti kortele naujame lange
-        TextView textKeyId;
-        TextView textLastUpdate;
-        TextView textConfirmed;
-        TextView textDeaths;
+        TextView textName;
+        TextView textTags;
+        TextView textCategory;
+        TextView textGlass;
 
         // create constructor to get widget reference
         public MyHolder(View itemView) {
             super(itemView);
-            textKeyId = (TextView) itemView.findViewById(R.id.textKeyId);
-            textLastUpdate = (TextView) itemView.findViewById(R.id.textLastUpdate);
-            textConfirmed = (TextView) itemView.findViewById(R.id.textConfirmed);
-            textDeaths = (TextView) itemView.findViewById(R.id.textDeaths);
+            textName = (TextView) itemView.findViewById(R.id.textName);
+            textTags = (TextView) itemView.findViewById(R.id.textTags);
+            textCategory = (TextView) itemView.findViewById(R.id.textCategory);
+            textGlass = (TextView) itemView.findViewById(R.id.textGlass);
             itemView.setOnClickListener(this);
         }
 
