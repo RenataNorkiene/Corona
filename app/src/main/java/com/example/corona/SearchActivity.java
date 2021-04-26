@@ -24,8 +24,8 @@ import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
-    public static final String COCTAILS_API = "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=";
-    private ArrayList<Coctails> coctailsList = new ArrayList<Coctails>();
+    public static final String COVID_API = "https://covid19-api.weedmark.systems/api/v1/stats";
+    private ArrayList<Corona> coronaList = new ArrayList<Corona>();
 
     private RecyclerView recyclerView; //korteliu vaizdas
     private Adapter adapter; //tarpininkas tarp searchActivity ir xml, apjungia dvi skirtingas klases
@@ -80,14 +80,14 @@ public class SearchActivity extends AppCompatActivity {
 
             }
             //is visu valstybiu saraso sukuriamas sarasas pagal ieskoma valstybe (query)
-            ArrayList<Coctails> coctailsList = JSON.getCoctailsList(coctailsList, query);
+            ArrayList<Corona> coronaListByCountry = JSON.getCoronaListByCountry(coronaList, query);
 
-            if (coctailsList.size() == 0) {
+            if (coronaListByCountry.size() == 0) {
                 Toast.makeText(this, getResources().getString(R.string.search_no_results) + query, Toast.LENGTH_SHORT).show();
             }
             // duomenu perdavimas Adapteriui ir Recycleview sukurimas
-            recyclerView = (RecyclerView) findViewById(R.id.coctails_list);
-            adapter = new Adapter(SearchActivity.this, coctailsList);
+            recyclerView = (RecyclerView) findViewById(R.id.corona_list);
+            adapter = new Adapter(SearchActivity.this, coronaListByCountry);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
         }
@@ -105,15 +105,10 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Coctails> doInBackground(String... params) { //will be executed while user waits (see progressDialog), gets JSON from API
+        protected JSONObject doInBackground(String... strings) { //will be executed while user waits (see progressDialog), gets JSON from API
             try {
-                JSONObject jsonObject = JSON.readJsonFromUrl(COCTAILS_API); //sioje vietoje perduosime URL
-
-                JSONArray jsonArray = null;
-                coctailsList = new ArrayList<Coctails>();
-                try {
-                    jsonArray = JSON.getJSONArray(jsonObject);
-                    coctailsList = JSON.getList(jsonArray);
+                JSONObject jsonObject = JSON.readJsonFromUrl(COVID_API); //sioje vietoje perduosime URL
+                return jsonObject;
 
             } catch (IOException e) { //input/output exeptions
                 Toast.makeText(
@@ -132,16 +127,24 @@ public class SearchActivity extends AppCompatActivity {
         }//doIn Background ends
 
         @Override
-        protected void onPostExecute(ArrayList<Coctails> coctailsList) {
+        protected void onPostExecute(JSONObject jsonObject) {
             progressDialog.dismiss();
 
-
-            if (coctailsList !== null) {
-                //system.err.println(jsonObject.toString());
+            int statusCode = 0; //kol kas jo dar nezinome, todel 0
+            try {
+                statusCode = jsonObject.getInt("statusCode");
+            } catch (JSONException e) {
+                Toast.makeText(
+                        SearchActivity.this,
+                        getResources().getString(R.string.search_error_reading_data) + e.getMessage(),
+                        Toast.LENGTH_LONG
+                ).show();
+            }//catch ends
+            if (statusCode == HttpURLConnection.HTTP_OK) {
                 JSONArray jsonArray = null;
                 try {
                     jsonArray = JSON.getJSONArray(jsonObject);
-                    coctailsList = JSON.getList(jsonArray);
+                    coronaList = JSON.getList(jsonArray);
 
                 } catch (JSONException e) {
                     System.out.println(getResources().getString(R.string.search_error_reading_data) + e.getMessage());

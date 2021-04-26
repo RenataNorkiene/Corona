@@ -16,7 +16,7 @@
     <string name="register_register">Register</string>
     <string name="register_invalid_credentials">Invalid username, email and/or password</string>
 
-    <string name="search_loading_data">Please wait for coctails data</string>
+    <string name="search_loading_data">Please wait for covid data</string>
     <string name="search_error_reading_data">Couldnt read data from API, for more information:</string>
     <string name="search_no_results">No results for this query: </string>
 </resources>
